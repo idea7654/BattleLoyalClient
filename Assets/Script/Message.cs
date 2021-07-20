@@ -20,6 +20,7 @@ public struct Message : IFlatbufferObject
   public TTable? Packet<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(6); return o != 0 ? (TTable?)__p.__union<TTable>(o + __p.bb_pos) : null; }
   public S2C_MOVE PacketAsS2C_MOVE() { return Packet<S2C_MOVE>().Value; }
   public S2C_SHOOT PacketAsS2C_SHOOT() { return Packet<S2C_SHOOT>().Value; }
+  public C2S_MOVE PacketAsC2S_MOVE() { return Packet<C2S_MOVE>().Value; }
 
   public static Offset<Message> CreateMessage(FlatBufferBuilder builder,
       MESSAGE_ID packet_type = MESSAGE_ID.NONE,

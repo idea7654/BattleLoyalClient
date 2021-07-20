@@ -7,5 +7,6 @@ public enum MESSAGE_ID : byte
   NONE = 0,
   S2C_MOVE = 1,
   S2C_SHOOT = 2,
+  C2S_MOVE = 3,
 };
 
