@@ -19,7 +19,7 @@ public class NetworkManager : MonoBehaviour
     Thread ServerCheck_thread;
     Queue<Message> Buffer = new Queue<Message>();
     //Queue<string> Buffer_Connection = new Queue<string>();
-    string strIP = "127.0.0.1";
+    string strIP = "203.250.133.43";
 
     //int port = 9999;
     Socket sock;
@@ -43,12 +43,14 @@ public class NetworkManager : MonoBehaviour
         sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         ip = IPAddress.Parse(strIP);
         endPoint = new IPEndPoint(IPAddress.Any, 0);
-        bindEP = new IPEndPoint(ip, 7777);
+        bindEP = new IPEndPoint(IPAddress.Any, 0);
         CsServerEP = new IPEndPoint(ip, 9999);
         sock.Bind(bindEP);
         remoteEP = (EndPoint)endPoint;
         ServerCheck_thread = new Thread(ServerCheck);
         ServerCheck_thread.Start();
+        //SendToReliable();
+        SendSample();
     }
 
     void ServerCheck()
@@ -60,10 +62,10 @@ public class NetworkManager : MonoBehaviour
             try
             {
                 int size = sock.EndReceiveFrom(result, ref remoteEP);
+                Debug.Log(size);
                 if (size > 0)
                 {
                     recvByte = (byte[])result.AsyncState;
-
                     int packetLength = BitConverter.ToInt32(recvByte, 0);
                     int packetNum = BitConverter.ToInt32(recvByte, 4);
                     
@@ -107,7 +109,6 @@ public class NetworkManager : MonoBehaviour
             {
                 message = Buffer.Dequeue();
             }
-
             MESSAGE_ID bufferType = message.PacketType;
 
             AnalyzePacket(bufferType, ref message);
@@ -120,10 +121,7 @@ public class NetworkManager : MonoBehaviour
         {
             var packet = message.Packet<S2C_MOVE>().Value;
             //SendToReliable();
-            while(true)
-            {
-                SendSample();
-            }
+            Debug.Log(packet.NickName);
         }
     }
 
@@ -176,8 +174,11 @@ public class NetworkManager : MonoBehaviour
         Array.Copy(PNByte, 0, newArray, PLByte.Length, PNByte.Length);
         Array.Copy(data, 0, newArray, PLByte.Length + PNByte.Length, data.Length);
 
-        int a = sock.SendTo(newArray, newArray.Length, SocketFlags.None, CsServerEP);
-
+        byte[] DebugArray = new byte[PacketLength * 2];
+        Array.Copy(newArray, 0, DebugArray, 0, newArray.Length);
+        Array.Copy(newArray, 0, DebugArray, newArray.Length, newArray.Length);
+        //int a = sock.SendTo(newArray, newArray.Length, SocketFlags.None, CsServerEP);
+        int a = sock.SendTo(DebugArray, DebugArray.Length, SocketFlags.None, CsServerEP);
         Debug.Log(a);
     }
 }

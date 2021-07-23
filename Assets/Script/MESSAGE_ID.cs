@@ -8,5 +8,6 @@ public enum MESSAGE_ID : byte
   S2C_MOVE = 1,
   S2C_SHOOT = 2,
   C2S_MOVE = 3,
+  C2S_EXTEND_SESSION = 4,
 };
 

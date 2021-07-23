@@ -21,6 +21,7 @@ public struct Message : IFlatbufferObject
   public S2C_MOVE PacketAsS2C_MOVE() { return Packet<S2C_MOVE>().Value; }
   public S2C_SHOOT PacketAsS2C_SHOOT() { return Packet<S2C_SHOOT>().Value; }
   public C2S_MOVE PacketAsC2S_MOVE() { return Packet<C2S_MOVE>().Value; }
+  public C2S_EXTEND_SESSION PacketAsC2S_EXTEND_SESSION() { return Packet<C2S_EXTEND_SESSION>().Value; }
 
   public static Offset<Message> CreateMessage(FlatBufferBuilder builder,
       MESSAGE_ID packet_type = MESSAGE_ID.NONE,
