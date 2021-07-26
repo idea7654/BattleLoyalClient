@@ -22,6 +22,12 @@ public struct Message : IFlatbufferObject
   public S2C_SHOOT PacketAsS2C_SHOOT() { return Packet<S2C_SHOOT>().Value; }
   public C2S_MOVE PacketAsC2S_MOVE() { return Packet<C2S_MOVE>().Value; }
   public C2S_EXTEND_SESSION PacketAsC2S_EXTEND_SESSION() { return Packet<C2S_EXTEND_SESSION>().Value; }
+  public C2S_REQUEST_LOGIN PacketAsC2S_REQUEST_LOGIN() { return Packet<C2S_REQUEST_LOGIN>().Value; }
+  public C2S_REQUEST_REGISTER PacketAsC2S_REQUEST_REGISTER() { return Packet<C2S_REQUEST_REGISTER>().Value; }
+  public S2C_COMPLETE_LOGIN PacketAsS2C_COMPLETE_LOGIN() { return Packet<S2C_COMPLETE_LOGIN>().Value; }
+  public S2C_COMPLETE_REGISTER PacketAsS2C_COMPLETE_REGISTER() { return Packet<S2C_COMPLETE_REGISTER>().Value; }
+  public S2C_LOGIN_ERROR PacketAsS2C_LOGIN_ERROR() { return Packet<S2C_LOGIN_ERROR>().Value; }
+  public S2C_REGISTER_ERROR PacketAsS2C_REGISTER_ERROR() { return Packet<S2C_REGISTER_ERROR>().Value; }
 
   public static Offset<Message> CreateMessage(FlatBufferBuilder builder,
       MESSAGE_ID packet_type = MESSAGE_ID.NONE,
