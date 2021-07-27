@@ -20,6 +20,7 @@ public class NetworkManager : MonoBehaviour
     Queue<Message> Buffer = new Queue<Message>();
     //Queue<string> Buffer_Connection = new Queue<string>();
     string strIP = "203.250.133.43";
+    int PacketNumber = 1;
 
     //int port = 9999;
     Socket sock;
@@ -30,12 +31,14 @@ public class NetworkManager : MonoBehaviour
     IPEndPoint bindEP;
     IPEndPoint CsServerEP;
     object buffer_lock = new object(); //queue충돌 방지용 lock
+    public WritePacket WritePacketManager;
     #endregion
 
     void Start()
     {
         serverOn();
         StartCoroutine(buffer_update());
+        WritePacketManager = new WritePacket();
     }
 
     void serverOn()
@@ -49,8 +52,9 @@ public class NetworkManager : MonoBehaviour
         remoteEP = (EndPoint)endPoint;
         ServerCheck_thread = new Thread(ServerCheck);
         ServerCheck_thread.Start();
+
         //SendToReliable();
-        SendSample();
+        //SendSample();
     }
 
     void ServerCheck()
@@ -117,11 +121,21 @@ public class NetworkManager : MonoBehaviour
 
     void AnalyzePacket(MESSAGE_ID bufferType, ref Message message)
     {
-        if (bufferType == MESSAGE_ID.S2C_MOVE)
+        switch(bufferType)
         {
-            var packet = message.Packet<S2C_MOVE>().Value;
+            case MESSAGE_ID.S2C_MOVE:
+                var packet = message.Packet<S2C_MOVE>().Value;
+                break;
             //SendToReliable();
-            Debug.Log(packet.NickName);
+            case MESSAGE_ID.S2C_LOGIN_ERROR:
+                GameObject.Find("Alert").transform.GetChild(0).gameObject.SetActive(true);
+                break;
+            case MESSAGE_ID.S2C_COMPLETE_LOGIN:
+                DontDestroyOnLoad(GameObject.Find("NetworkManager").gameObject);
+                //여기서 씬전환 + 유저정보 바탕 프리팹
+                break;
+            default:
+                break;
         }
     }
 
@@ -132,6 +146,27 @@ public class NetworkManager : MonoBehaviour
         sock.SendTo(AckByte, AckByte.Length, SocketFlags.None, CsServerEP);
     }
 
+    public void SendPacket(byte[] SendData)
+    {
+        int PacketLength = 0;
+
+        PacketLength = SendData.Length + sizeof(int) * 2;
+        byte[] PLByte = BitConverter.GetBytes(PacketLength);
+        byte[] PNByte = BitConverter.GetBytes(PacketNumber);
+
+        byte[] newArray = new byte[PacketLength];
+
+        Array.Copy(PLByte, 0, newArray, 0, PLByte.Length);
+        Array.Copy(PNByte, 0, newArray, PLByte.Length, PNByte.Length);
+        Array.Copy(SendData, 0, newArray, PLByte.Length + PNByte.Length, SendData.Length);
+
+        int result = sock.SendTo(newArray, newArray.Length, SocketFlags.None, CsServerEP);
+        Debug.Log(result);
+    }
+}
+
+public class WritePacket
+{
     FlatBuffers.FlatBufferBuilder builder = new FlatBufferBuilder(1024);
 
     public byte[] WRITE_PU_C2S_MOVE(String nickname, Vector3 pos, Vector3 dir)
@@ -150,43 +185,55 @@ public class NetworkManager : MonoBehaviour
         var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_MOVE, packet.Value);
         builder.Finish(message.Value);
 
-        Message messageA = Message.GetRootAsMessage(builder.DataBuffer);
-        MESSAGE_ID bufferType = messageA.PacketType;
+        //Message messageA = Message.GetRootAsMessage(builder.DataBuffer);
+        //MESSAGE_ID bufferType = messageA.PacketType;
 
         byte[] returnBuf = builder.SizedByteArray();
         builder.Clear();
         return returnBuf;
     }
 
-    void SendSample()
+    public byte[] WRITE_PU_C2S_REQUEST_LOGIN(String email, String password)
     {
-        int PacketLength = 0;
-        int PacketNumber = 1;
+        var userEmail = builder.CreateString(email);
+        var userPassword = builder.CreateString(password);
 
-        byte[] data = WRITE_PU_C2S_MOVE("Edea", new Vector3(1f, 1f, 1f), new Vector3(1f, 1f, 1f));
-        PacketLength = data.Length + sizeof(int) * 2;
-        byte[] PLByte = BitConverter.GetBytes(PacketLength);
-        byte[] PNByte = BitConverter.GetBytes(PacketNumber);
+        C2S_REQUEST_LOGIN.StartC2S_REQUEST_LOGIN(builder);
+        C2S_REQUEST_LOGIN.AddEmail(builder, userEmail);
+        C2S_REQUEST_LOGIN.AddPassword(builder, userPassword);
+        var packet = C2S_REQUEST_LOGIN.EndC2S_REQUEST_LOGIN(builder);
+        builder.Finish(packet.Value);
 
-        byte[] newArray = new byte[PacketLength];
+        var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_REQUEST_LOGIN, packet.Value);
+        builder.Finish(message.Value);
 
-        Array.Copy(PLByte, 0, newArray, 0, PLByte.Length);
-        Array.Copy(PNByte, 0, newArray, PLByte.Length, PNByte.Length);
-        Array.Copy(data, 0, newArray, PLByte.Length + PNByte.Length, data.Length);
+        byte[] returnBuf = builder.SizedByteArray();
+        builder.Clear();
+        return returnBuf;
+    }
 
-        byte[] DebugArray = new byte[PacketLength * 2];
-        Array.Copy(newArray, 0, DebugArray, 0, newArray.Length);
-        Array.Copy(newArray, 0, DebugArray, newArray.Length, newArray.Length);
-        //int a = sock.SendTo(newArray, newArray.Length, SocketFlags.None, CsServerEP);
-        int a = sock.SendTo(DebugArray, DebugArray.Length, SocketFlags.None, CsServerEP);
-        Debug.Log(a);
+    public byte[] WRITE_PU_C2S_REQUEST_REGISTER(String email, String nickname, String password)
+    {
+        var userEmail = builder.CreateString(email);
+        var userNick = builder.CreateString(nickname);
+        var userPassword = builder.CreateString(password);
+
+        C2S_REQUEST_REGISTER.StartC2S_REQUEST_REGISTER(builder);
+        C2S_REQUEST_REGISTER.AddEmail(builder, userEmail);
+        C2S_REQUEST_REGISTER.AddNickname(builder, userNick);
+        C2S_REQUEST_REGISTER.AddPassword(builder, userPassword);
+        var packet = C2S_REQUEST_REGISTER.EndC2S_REQUEST_REGISTER(builder);
+        builder.Finish(packet.Value);
+
+        var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_REQUEST_REGISTER, packet.Value);
+        builder.Finish(message.Value);
+
+        byte[] returnBuf = builder.SizedByteArray();
+        builder.Clear();
+        return returnBuf;
     }
 }
 
-class WritePacket
-{
-    
-}
 
 class ReadPacket
 {

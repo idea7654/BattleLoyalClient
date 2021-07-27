@@ -23,26 +23,36 @@ public struct C2S_REQUEST_REGISTER : IFlatbufferObject
   public ArraySegment<byte>? GetEmailBytes() { return __p.__vector_as_arraysegment(4); }
 #endif
   public byte[] GetEmailArray() { return __p.__vector_as_array<byte>(4); }
-  public string Password { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public string Nickname { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetPasswordBytes() { return __p.__vector_as_span<byte>(6, 1); }
+  public Span<byte> GetNicknameBytes() { return __p.__vector_as_span<byte>(6, 1); }
 #else
-  public ArraySegment<byte>? GetPasswordBytes() { return __p.__vector_as_arraysegment(6); }
+  public ArraySegment<byte>? GetNicknameBytes() { return __p.__vector_as_arraysegment(6); }
 #endif
-  public byte[] GetPasswordArray() { return __p.__vector_as_array<byte>(6); }
+  public byte[] GetNicknameArray() { return __p.__vector_as_array<byte>(6); }
+  public string Password { get { int o = __p.__offset(8); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetPasswordBytes() { return __p.__vector_as_span<byte>(8, 1); }
+#else
+  public ArraySegment<byte>? GetPasswordBytes() { return __p.__vector_as_arraysegment(8); }
+#endif
+  public byte[] GetPasswordArray() { return __p.__vector_as_array<byte>(8); }
 
   public static Offset<C2S_REQUEST_REGISTER> CreateC2S_REQUEST_REGISTER(FlatBufferBuilder builder,
       StringOffset emailOffset = default(StringOffset),
+      StringOffset nicknameOffset = default(StringOffset),
       StringOffset passwordOffset = default(StringOffset)) {
-    builder.StartTable(2);
+    builder.StartTable(3);
     C2S_REQUEST_REGISTER.AddPassword(builder, passwordOffset);
+    C2S_REQUEST_REGISTER.AddNickname(builder, nicknameOffset);
     C2S_REQUEST_REGISTER.AddEmail(builder, emailOffset);
     return C2S_REQUEST_REGISTER.EndC2S_REQUEST_REGISTER(builder);
   }
 
-  public static void StartC2S_REQUEST_REGISTER(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void StartC2S_REQUEST_REGISTER(FlatBufferBuilder builder) { builder.StartTable(3); }
   public static void AddEmail(FlatBufferBuilder builder, StringOffset emailOffset) { builder.AddOffset(0, emailOffset.Value, 0); }
-  public static void AddPassword(FlatBufferBuilder builder, StringOffset passwordOffset) { builder.AddOffset(1, passwordOffset.Value, 0); }
+  public static void AddNickname(FlatBufferBuilder builder, StringOffset nicknameOffset) { builder.AddOffset(1, nicknameOffset.Value, 0); }
+  public static void AddPassword(FlatBufferBuilder builder, StringOffset passwordOffset) { builder.AddOffset(2, passwordOffset.Value, 0); }
   public static Offset<C2S_REQUEST_REGISTER> EndC2S_REQUEST_REGISTER(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<C2S_REQUEST_REGISTER>(o);

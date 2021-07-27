@@ -48,7 +48,16 @@ public class TPSCharacterController : MonoBehaviour
             x = Mathf.Clamp(x, 335f, 361f);
         }
 
-        cameraArm.rotation = Quaternion.Euler(camAngle.x - mouseDelta.y, camAngle.y + mouseDelta.x, camAngle.z);
+        //cameraArm.RotateAround(characterBody.position, Vector3.forward, mouseDelta.x);
+        cameraArm.rotation = Quaternion.Euler(camAngle.x - mouseDelta.y, camAngle.y + mouseDelta.x, 0);
+    }
+
+    private float ClampAngle(float angle, float min, float max)
+    {
+        if (angle < -360) angle += 360;
+        if (angle > 360) angle -= 360;
+
+        return Mathf.Clamp(angle, min, max);
     }
 
     private void MoveCharacter()
