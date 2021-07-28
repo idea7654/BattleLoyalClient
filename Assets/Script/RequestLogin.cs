@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class RequestLogin : MonoBehaviour
 {
     public Text Email;
-    public Text Password;
+    public InputField Password;
     private Button Button;
     NetworkManager networkManager;
 
@@ -28,9 +28,8 @@ public class RequestLogin : MonoBehaviour
     {
         string email = Email.text;
         string password = Password.text;
+
         byte[] sendData = networkManager.WritePacketManager.WRITE_PU_C2S_REQUEST_LOGIN(email, password);
         networkManager.SendPacket(sendData);
-        //여기서 패킷 만들어서 보내면됨
-       // networkManager
     }
 }

@@ -7,7 +7,7 @@ public class RequestRegister : MonoBehaviour
 {
     public Text Email;
     public Text Nickname;
-    public Text Password;
+    public InputField Password;
     private Button Button;
     NetworkManager networkManager;
     // Start is called before the first frame update
@@ -29,6 +29,8 @@ public class RequestRegister : MonoBehaviour
         string email = Email.text;
         string nickname = Nickname.text;
         string password = Password.text;
-        //
+
+        byte[] sendData = networkManager.WritePacketManager.WRITE_PU_C2S_REQUEST_REGISTER(email, nickname, password);
+        networkManager.SendPacket(sendData);
     }
 }

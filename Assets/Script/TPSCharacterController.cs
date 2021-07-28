@@ -64,7 +64,12 @@ public class TPSCharacterController : MonoBehaviour
     {
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         bool isMove = moveInput.magnitude != 0;
-        animator.SetBool("isMove", isMove);
+        float value;
+        if (isMove)
+            value = 1.0f;
+        else
+            value = 0f;
+        animator.SetFloat("isMove", value);
         if(isMove)
         {
             Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;

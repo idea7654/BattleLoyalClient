@@ -134,6 +134,13 @@ public class NetworkManager : MonoBehaviour
                 DontDestroyOnLoad(GameObject.Find("NetworkManager").gameObject);
                 //여기서 씬전환 + 유저정보 바탕 프리팹
                 break;
+            case MESSAGE_ID.S2C_COMPLETE_REGISTER:
+                //여기선 로그인 페이지로 돌아가도록..
+                break;
+            case MESSAGE_ID.S2C_REGISTER_ERROR:
+                //여기선 에러창 뜨게..
+                GameObject.Find("Alert").transform.GetChild(0).gameObject.SetActive(true);
+                break;
             default:
                 break;
         }
@@ -184,9 +191,6 @@ public class WritePacket
 
         var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_MOVE, packet.Value);
         builder.Finish(message.Value);
-
-        //Message messageA = Message.GetRootAsMessage(builder.DataBuffer);
-        //MESSAGE_ID bufferType = messageA.PacketType;
 
         byte[] returnBuf = builder.SizedByteArray();
         builder.Clear();

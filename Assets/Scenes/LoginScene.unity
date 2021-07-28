@@ -639,17 +639,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
---- !u!114 &268616453 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 11462110, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
-  m_PrefabInstance: {fileID: 268616452}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &268616454 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 22401644, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
@@ -1204,6 +1193,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &602561762 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11468188, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
+  m_PrefabInstance: {fileID: 268616452}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &647651138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1337,7 +1337,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Email: {fileID: 1038147858}
   Nickname: {fileID: 1934045589}
-  Password: {fileID: 268616453}
+  Password: {fileID: 602561762}
 --- !u!1 &825030961
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,17 +1843,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d4335305e740454a960043b1b837e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &972710149 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 11462110, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
-  m_PrefabInstance: {fileID: 452887474}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1007965543 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 149968, guid: 751f7137cfffd4a16b1a4c191e687d64, type: 3}
@@ -1872,7 +1861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Email: {fileID: 569460905}
-  Password: {fileID: 972710149}
+  Password: {fileID: 1913303400}
 --- !u!1001 &1038147856
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2922,6 +2911,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca2098eda18954719933727edf727b2e, type: 3}
+--- !u!114 &1913303400 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 11468188, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
+  m_PrefabInstance: {fileID: 452887474}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1934045589 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 11462110, guid: 4c5368a58301e4892a15a0228d4fb291, type: 3}
