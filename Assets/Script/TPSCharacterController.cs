@@ -16,20 +16,22 @@ public class TPSCharacterController : MonoBehaviour
         public float z;
         public float angle_y;
     }
+
     public float speed = 3.0f;
     CharacterPosition charaPos;
     private Vector3 moveDirection;
-
     Animator animator;
+
     void Start()
     {
         animator = characterBody.GetComponent<Animator>();
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        LookAround();
+        //LookAround();
         MoveCharacter();
     }
 
@@ -64,20 +66,13 @@ public class TPSCharacterController : MonoBehaviour
     {
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         bool isMove = moveInput.magnitude != 0;
-        float value;
+        animator.SetBool("isRun", isMove);
+        
         if (isMove)
-            value = 1.0f;
-        else
-            value = 0f;
-        animator.SetFloat("isMove", value);
-        if(isMove)
         {
-            Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
-            Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
-            Vector3 moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
-
-            characterBody.forward = moveDir;
-            transform.position += moveDir * Time.deltaTime * speed;
+            Vector3 moveDir = new Vector3(moveInput.x, 0, moveInput.y);
+            transform.Rotate(Vector3.up, moveInput.x * 100f * Time.deltaTime);
+            transform.Translate(moveDir * speed * Time.deltaTime);
         }
     }
 }
