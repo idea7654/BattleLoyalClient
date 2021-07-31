@@ -16,17 +16,23 @@ public struct S2C_COMPLETE_LOGIN : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public S2C_COMPLETE_LOGIN __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public bool Issuccess { get { int o = __p.__offset(4); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
+  public string Nickname { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetNicknameBytes() { return __p.__vector_as_span<byte>(4, 1); }
+#else
+  public ArraySegment<byte>? GetNicknameBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetNicknameArray() { return __p.__vector_as_array<byte>(4); }
 
   public static Offset<S2C_COMPLETE_LOGIN> CreateS2C_COMPLETE_LOGIN(FlatBufferBuilder builder,
-      bool issuccess = false) {
+      StringOffset nicknameOffset = default(StringOffset)) {
     builder.StartTable(1);
-    S2C_COMPLETE_LOGIN.AddIssuccess(builder, issuccess);
+    S2C_COMPLETE_LOGIN.AddNickname(builder, nicknameOffset);
     return S2C_COMPLETE_LOGIN.EndS2C_COMPLETE_LOGIN(builder);
   }
 
   public static void StartS2C_COMPLETE_LOGIN(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddIssuccess(FlatBufferBuilder builder, bool issuccess) { builder.AddBool(0, issuccess, false); }
+  public static void AddNickname(FlatBufferBuilder builder, StringOffset nicknameOffset) { builder.AddOffset(0, nicknameOffset.Value, 0); }
   public static Offset<S2C_COMPLETE_LOGIN> EndS2C_COMPLETE_LOGIN(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<S2C_COMPLETE_LOGIN>(o);

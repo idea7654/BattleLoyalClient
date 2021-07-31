@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Linq;
 using FlatBuffers;
-
+using UnityEngine.SceneManagement;
 [Serializable]
 public class NetworkManager : MonoBehaviour
 {
@@ -33,6 +33,8 @@ public class NetworkManager : MonoBehaviour
     object buffer_lock = new object(); //queue충돌 방지용 lock
     public WritePacket WritePacketManager;
     #endregion
+
+    public GameObject MyCharacter;
 
     void Start()
     {
@@ -131,14 +133,20 @@ public class NetworkManager : MonoBehaviour
                 GameObject.Find("Alert").transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case MESSAGE_ID.S2C_COMPLETE_LOGIN:
-                DontDestroyOnLoad(GameObject.Find("NetworkManager").gameObject);
-                //여기서 씬전환 + 유저정보 바탕 프리팹
-                break;
+                {
+                    DontDestroyOnLoad(GameObject.Find("NetworkManager").gameObject);
+                    var packetValue = message.Packet<S2C_COMPLETE_LOGIN>().Value;
+                    SceneManager.LoadScene("LobbyScene");
+                    GameObject obj = Instantiate(MyCharacter, new Vector3(-2.7f, 0.2f, -32f), Quaternion.Euler(new Vector3(0, 0, 0)));
+                    obj.name = packetValue.Nickname;
+                    DontDestroyOnLoad(obj);
+                    //여기서 씬전환 + 유저정보 바탕 프리팹(우선은 로비서버 -> 컨텐츠 서버로 넘어갈 예정이기에 이건 로비에서 사용될 것
+                    break;
+                }
             case MESSAGE_ID.S2C_COMPLETE_REGISTER:
                 //여기선 로그인 페이지로 돌아가도록..
                 break;
             case MESSAGE_ID.S2C_REGISTER_ERROR:
-                //여기선 에러창 뜨게..
                 GameObject.Find("Alert").transform.GetChild(0).gameObject.SetActive(true);
                 break;
             default:
