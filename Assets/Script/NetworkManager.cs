@@ -139,6 +139,7 @@ public class NetworkManager : MonoBehaviour
                     SceneManager.LoadScene("LobbyScene");
                     GameObject obj = Instantiate(MyCharacter, new Vector3(-2.7f, 0.2f, -32f), Quaternion.Euler(new Vector3(0, 0, 0)));
                     obj.name = packetValue.Nickname;
+                    obj.GetComponent<TPSCharacterController>().enabled = false;
                     DontDestroyOnLoad(obj);
                     //여기서 씬전환 + 유저정보 바탕 프리팹(우선은 로비서버 -> 컨텐츠 서버로 넘어갈 예정이기에 이건 로비에서 사용될 것
                     break;

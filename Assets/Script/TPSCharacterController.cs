@@ -42,7 +42,7 @@ public class TPSCharacterController : MonoBehaviour
 
     private void MoveCharacter()
     {
-        Vector2 moveInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Vertical"));
+        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         bool isMove = moveInput.magnitude != 0;
         animator.SetBool("isRun", isMove);
 
