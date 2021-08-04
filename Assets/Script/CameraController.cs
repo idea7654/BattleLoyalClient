@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         float vertical = Input.GetAxis("Mouse Y") * sensitivity;
-        composer.m_TrackedObjectOffset.y += vertical;
+        //composer.m_TrackedObjectOffset.y += vertical;
         composer.m_TrackedObjectOffset.y = Mathf.Clamp(composer.m_TrackedObjectOffset.y, -10, 10);
     }
 }

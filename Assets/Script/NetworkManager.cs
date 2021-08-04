@@ -150,6 +150,18 @@ public class NetworkManager : MonoBehaviour
             case MESSAGE_ID.S2C_REGISTER_ERROR:
                 GameObject.Find("Alert").transform.GetChild(0).gameObject.SetActive(true);
                 break;
+            case MESSAGE_ID.S2C_GAME_START:
+                {
+                    SceneManager.LoadScene("SampleScene");
+                    var packetGS = message.Packet<S2C_GAME_START>().Value;
+                    int userLength = packetGS.PlayersLength;
+                    for (int i = 0; i < userLength; i++)
+                    {
+                        //Debug.Log(packetGS.Players(i));
+                        //여기서 인원수만큼 프리팹 등록...
+                    }
+                    break;
+                }
             default:
                 break;
         }
@@ -239,6 +251,23 @@ public class WritePacket
         builder.Finish(packet.Value);
 
         var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_REQUEST_REGISTER, packet.Value);
+        builder.Finish(message.Value);
+
+        byte[] returnBuf = builder.SizedByteArray();
+        builder.Clear();
+        return returnBuf;
+    }
+
+    public byte[] WRITE_PU_C2S_START_MATCHING(String nickname)
+    {
+        var nickName = builder.CreateString(nickname);
+
+        C2S_START_MATCHING.StartC2S_START_MATCHING(builder);
+        C2S_START_MATCHING.AddNickname(builder, nickName);
+        var packet = C2S_START_MATCHING.EndC2S_START_MATCHING(builder);
+        builder.Finish(packet.Value);
+
+        var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_START_MATCHING, packet.Value);
         builder.Finish(message.Value);
 
         byte[] returnBuf = builder.SizedByteArray();
