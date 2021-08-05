@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GetGun : MonoBehaviour
 {
+    Animator animator;
     // Update is called once per frame
     void Update()
     {
@@ -27,6 +28,8 @@ public class GetGun : MonoBehaviour
                 hitInfo.transform.gameObject.GetComponent<LateUpdatedFollow>().targetToFollow = GameObject.Find("RightHandAttatch").transform;
                 PlayerShooter Ps = GameObject.Find("Nickname").GetComponent<PlayerShooter>();
                 Ps.target = hitInfo.transform.GetChild(1).transform;
+                animator = transform.GetChild(0).GetComponent<Animator>();
+                animator.SetBool("hasGun", true);
             }
         }
     }

@@ -12,11 +12,15 @@ public class Gun : MonoBehaviour
 
     private float timer;
 
-    public Transform characterBody;
+    private Transform characterBody;
+    private NetworkManager networkManager;
     Animator animator;
 
     void Start()
     {
+        //networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
+        //characterBody = GameObject.Find(networkManager.MyNick).transform.GetChild(0);
+        characterBody = GameObject.Find("Nickname").transform;
         animator = characterBody.GetComponent<Animator>();
     }
 

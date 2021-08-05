@@ -17,7 +17,7 @@ public class GameStart : MonoBehaviour
 
     private void StartMatching()
     {
-        byte[] sendData = networkManager.WritePacketManager.WRITE_PU_C2S_START_MATCHING("Edea");
+        byte[] sendData = networkManager.WritePacketManager.WRITE_PU_C2S_START_MATCHING(networkManager.MyNick);
         networkManager.SendPacket(sendData);
     }
 }

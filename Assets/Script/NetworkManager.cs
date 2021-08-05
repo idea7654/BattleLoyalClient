@@ -35,6 +35,8 @@ public class NetworkManager : MonoBehaviour
     #endregion
 
     public GameObject MyCharacter;
+    public GameObject OtherCharacter;
+    public string MyNick;
 
     void Start()
     {
@@ -139,6 +141,7 @@ public class NetworkManager : MonoBehaviour
                     SceneManager.LoadScene("LobbyScene");
                     GameObject obj = Instantiate(MyCharacter, new Vector3(-2.7f, 0.2f, -32f), Quaternion.Euler(new Vector3(0, 0, 0)));
                     obj.name = packetValue.Nickname;
+                    MyNick = packetValue.Nickname;
                     obj.GetComponent<TPSCharacterController>().enabled = false;
                     DontDestroyOnLoad(obj);
                     //여기서 씬전환 + 유저정보 바탕 프리팹(우선은 로비서버 -> 컨텐츠 서버로 넘어갈 예정이기에 이건 로비에서 사용될 것
@@ -154,11 +157,17 @@ public class NetworkManager : MonoBehaviour
                 {
                     SceneManager.LoadScene("SampleScene");
                     var packetGS = message.Packet<S2C_GAME_START>().Value;
-                    int userLength = packetGS.PlayersLength;
+                    int userLength = packetGS.UserdataLength;
+                    GameObject.Find(MyNick).GetComponent<TPSCharacterController>().enabled = true;
+                    GameObject.Find(MyNick).transform.position = new Vector3(1f, 0f, 0f); //여긴 나중에 스폰위치가 될 것!
                     for (int i = 0; i < userLength; i++)
                     {
-                        //Debug.Log(packetGS.Players(i));
-                        //여기서 인원수만큼 프리팹 등록...
+                        //packetGS.Userdatas(i) -> 한명한명 닉네임, 포지션 데이터
+                        //if(packetGS.Userdata(i).Nickname != MyNick)
+                        //{
+                        //   GameObject otherPlayer = Instantiate(OtherCharacter, new Vector3(0, 0, 0), Quaternion.Euler(new Vector3(0, 0, 0)));
+                        //}
+                        Debug.Log(packetGS.Userdata(i).GetType());
                     }
                     break;
                 }

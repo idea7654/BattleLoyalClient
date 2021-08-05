@@ -1843,7 +1843,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d4335305e740454a960043b1b837e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MyCharacter: {fileID: 7551170049375015425, guid: 1faa3e70bf82e3a4bbd9640299c6f15a, type: 3}
+  MyCharacter: {fileID: 4076683975528319998, guid: 6009e0635157d014497eddd73b35ffa4, type: 3}
+  OtherCharacter: {fileID: 7551170049375015425, guid: 1faa3e70bf82e3a4bbd9640299c6f15a, type: 3}
+  MyNick: 
 --- !u!1 &1007965543 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 149968, guid: 751f7137cfffd4a16b1a4c191e687d64, type: 3}

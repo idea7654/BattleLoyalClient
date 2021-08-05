@@ -16,21 +16,21 @@ public struct S2C_GAME_START : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public S2C_GAME_START __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public string Players(int j) { int o = __p.__offset(4); return o != 0 ? __p.__string(__p.__vector(o) + j * 4) : null; }
-  public int PlayersLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public InitUserInfo? Userdata(int j) { int o = __p.__offset(4); return o != 0 ? (InitUserInfo?)(new InitUserInfo()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int UserdataLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<S2C_GAME_START> CreateS2C_GAME_START(FlatBufferBuilder builder,
-      VectorOffset playersOffset = default(VectorOffset)) {
+      VectorOffset userdataOffset = default(VectorOffset)) {
     builder.StartTable(1);
-    S2C_GAME_START.AddPlayers(builder, playersOffset);
+    S2C_GAME_START.AddUserdata(builder, userdataOffset);
     return S2C_GAME_START.EndS2C_GAME_START(builder);
   }
 
   public static void StartS2C_GAME_START(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddPlayers(FlatBufferBuilder builder, VectorOffset playersOffset) { builder.AddOffset(0, playersOffset.Value, 0); }
-  public static VectorOffset CreatePlayersVector(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static VectorOffset CreatePlayersVectorBlock(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static void StartPlayersVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddUserdata(FlatBufferBuilder builder, VectorOffset userdataOffset) { builder.AddOffset(0, userdataOffset.Value, 0); }
+  public static VectorOffset CreateUserdataVector(FlatBufferBuilder builder, Offset<InitUserInfo>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateUserdataVectorBlock(FlatBufferBuilder builder, Offset<InitUserInfo>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static void StartUserdataVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<S2C_GAME_START> EndS2C_GAME_START(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<S2C_GAME_START>(o);
