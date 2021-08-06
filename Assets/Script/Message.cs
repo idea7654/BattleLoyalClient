@@ -29,6 +29,7 @@ public struct Message : IFlatbufferObject
   public S2C_LOGIN_ERROR PacketAsS2C_LOGIN_ERROR() { return Packet<S2C_LOGIN_ERROR>().Value; }
   public S2C_REGISTER_ERROR PacketAsS2C_REGISTER_ERROR() { return Packet<S2C_REGISTER_ERROR>().Value; }
   public C2S_START_MATCHING PacketAsC2S_START_MATCHING() { return Packet<C2S_START_MATCHING>().Value; }
+  public C2S_CANCEL_MATCHING PacketAsC2S_CANCEL_MATCHING() { return Packet<C2S_CANCEL_MATCHING>().Value; }
   public S2C_GAME_START PacketAsS2C_GAME_START() { return Packet<S2C_GAME_START>().Value; }
 
   public static Offset<Message> CreateMessage(FlatBufferBuilder builder,

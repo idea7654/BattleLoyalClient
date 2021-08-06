@@ -17,13 +17,13 @@ public class CameraController : MonoBehaviour
         composer = GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineComposer>();
         vcam = GetComponent<CinemachineVirtualCamera>();
         //------------µð¹ö±ë¿ë---------------
-        vcam.LookAt = GameObject.Find("MyCharacter1").transform;
-        vcam.Follow = GameObject.Find("Nickname").transform;
+        //vcam.LookAt = GameObject.Find("MyCharacter1").transform;
+        //vcam.Follow = GameObject.Find("Nickname").transform;
         //-----------------------------------
-        //networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
-        //TargetObj = GameObject.Find(networkManager.MyNick);
-        //vcam.LookAt = TargetObj.transform;
-        //vcam.Follow = TargetObj.transform.GetChild(0).transform;
+        networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
+        TargetObj = GameObject.Find(networkManager.MyNick);
+        vcam.LookAt = TargetObj.transform;
+        vcam.Follow = TargetObj.transform.GetChild(0).transform;
     }
 
     // Update is called once per frame

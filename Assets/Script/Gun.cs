@@ -18,9 +18,9 @@ public class Gun : MonoBehaviour
 
     void Start()
     {
-        //networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
-        //characterBody = GameObject.Find(networkManager.MyNick).transform.GetChild(0);
-        characterBody = GameObject.Find("Nickname").transform;
+        networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
+        characterBody = GameObject.Find(networkManager.MyNick).transform.GetChild(0);
+        //characterBody = GameObject.Find("Nickname").transform;
         animator = characterBody.GetComponent<Animator>();
     }
 

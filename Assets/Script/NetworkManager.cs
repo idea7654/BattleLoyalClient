@@ -139,7 +139,7 @@ public class NetworkManager : MonoBehaviour
                     DontDestroyOnLoad(GameObject.Find("NetworkManager").gameObject);
                     var packetValue = message.Packet<S2C_COMPLETE_LOGIN>().Value;
                     SceneManager.LoadScene("LobbyScene");
-                    GameObject obj = Instantiate(MyCharacter, new Vector3(-2.7f, 0.2f, -32f), Quaternion.Euler(new Vector3(0, 0, 0)));
+                    GameObject obj = Instantiate(MyCharacter, new Vector3(-2.7f, 0.2f, -32f), Quaternion.Euler(new Vector3(0, 180f, 0)));
                     obj.name = packetValue.Nickname;
                     MyNick = packetValue.Nickname;
                     obj.GetComponent<TPSCharacterController>().enabled = false;
@@ -159,15 +159,18 @@ public class NetworkManager : MonoBehaviour
                     var packetGS = message.Packet<S2C_GAME_START>().Value;
                     int userLength = packetGS.UserdataLength;
                     GameObject.Find(MyNick).GetComponent<TPSCharacterController>().enabled = true;
-                    GameObject.Find(MyNick).transform.position = new Vector3(1f, 0f, 0f); //여긴 나중에 스폰위치가 될 것!
+                    
                     for (int i = 0; i < userLength; i++)
                     {
-                        //packetGS.Userdatas(i) -> 한명한명 닉네임, 포지션 데이터
-                        //if(packetGS.Userdata(i).Nickname != MyNick)
-                        //{
-                        //   GameObject otherPlayer = Instantiate(OtherCharacter, new Vector3(0, 0, 0), Quaternion.Euler(new Vector3(0, 0, 0)));
-                        //}
-                        Debug.Log(packetGS.Userdata(i).GetType());
+                        if(packetGS.Userdata(i).Value.Nickname == MyNick)
+                        {
+                            GameObject.Find(MyNick).transform.position = new Vector3(packetGS.Userdata(i).Value.Pos.Value.X, packetGS.Userdata(i).Value.Pos.Value.Y, packetGS.Userdata(i).Value.Pos.Value.Z);
+                        }
+                        else
+                        {
+                            GameObject otherPlayer = Instantiate(OtherCharacter, new Vector3(packetGS.Userdata(i).Value.Pos.Value.X, packetGS.Userdata(i).Value.Pos.Value.Y, packetGS.Userdata(i).Value.Pos.Value.Z), Quaternion.Euler(new Vector3(0, 0, 0)));
+                            otherPlayer.name = packetGS.Userdata(i).Value.Nickname;
+                        }
                     }
                     break;
                 }
@@ -277,6 +280,23 @@ public class WritePacket
         builder.Finish(packet.Value);
 
         var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_START_MATCHING, packet.Value);
+        builder.Finish(message.Value);
+
+        byte[] returnBuf = builder.SizedByteArray();
+        builder.Clear();
+        return returnBuf;
+    }
+
+    public byte[] WRITE_PU_C2S_CANCEL_MATCHING(String nickname)
+    {
+        var nickName = builder.CreateString(nickname);
+
+        C2S_CANCEL_MATCHING.StartC2S_CANCEL_MATCHING(builder);
+        C2S_CANCEL_MATCHING.AddNickname(builder, nickName);
+        var packet = C2S_CANCEL_MATCHING.EndC2S_CANCEL_MATCHING(builder);
+        builder.Finish(packet.Value);
+
+        var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_CANCEL_MATCHING, packet.Value);
         builder.Finish(message.Value);
 
         byte[] returnBuf = builder.SizedByteArray();
