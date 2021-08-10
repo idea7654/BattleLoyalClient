@@ -128,7 +128,16 @@ public class NetworkManager : MonoBehaviour
         switch(bufferType)
         {
             case MESSAGE_ID.S2C_MOVE:
-                var packet = message.Packet<S2C_MOVE>().Value;
+                {
+                    var packet = message.Packet<S2C_MOVE>().Value;
+                    var nickname = packet.NickName;
+                    var userPos = packet.Pos;
+                    float userDir = packet.Dir;
+                    int moveDir = packet.Movedir;
+                    GameObject player = GameObject.Find(nickname);
+                    player.transform.position = new Vector3(userPos.Value.X, userPos.Value.Y, userPos.Value.Z);
+                    player.transform.rotation = Quaternion.Euler(new Vector3(0, userDir, 0));
+                }
                 break;
             //SendToReliable();
             case MESSAGE_ID.S2C_LOGIN_ERROR:
@@ -170,6 +179,7 @@ public class NetworkManager : MonoBehaviour
                         {
                             GameObject otherPlayer = Instantiate(OtherCharacter, new Vector3(packetGS.Userdata(i).Value.Pos.Value.X, packetGS.Userdata(i).Value.Pos.Value.Y, packetGS.Userdata(i).Value.Pos.Value.Z), Quaternion.Euler(new Vector3(0, 0, 0)));
                             otherPlayer.name = packetGS.Userdata(i).Value.Nickname;
+                            DontDestroyOnLoad(otherPlayer);
                         }
                     }
                     break;
@@ -209,16 +219,16 @@ public class WritePacket
 {
     FlatBuffers.FlatBufferBuilder builder = new FlatBufferBuilder(1024);
 
-    public byte[] WRITE_PU_C2S_MOVE(String nickname, Vector3 pos, Vector3 dir)
+    public byte[] WRITE_PU_C2S_MOVE(String nickname, Vector3 pos, float angleY, int moveDir)
     {
         var playername = builder.CreateString(nickname);
         var playerPos = Vec3.CreateVec3(builder, pos.x, pos.y, pos.z);
-        var playerDir = Vec3.CreateVec3(builder, dir.x, dir.y, dir.z);
 
         C2S_MOVE.StartC2S_MOVE(builder);
         C2S_MOVE.AddNickName(builder, playername);
         C2S_MOVE.AddPos(builder, Vec3.CreateVec3(builder, pos.x, pos.y, pos.z));
-        C2S_MOVE.AddDir(builder, Vec3.CreateVec3(builder, dir.x, dir.y, dir.z));
+        C2S_MOVE.AddDir(builder, angleY);
+        C2S_MOVE.AddMovedir(builder, moveDir);
         var packet = C2S_MOVE.EndC2S_MOVE(builder);
         builder.Finish(packet.Value);
 

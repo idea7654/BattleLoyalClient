@@ -24,12 +24,14 @@ public struct S2C_MOVE : IFlatbufferObject
 #endif
   public byte[] GetNickNameArray() { return __p.__vector_as_array<byte>(4); }
   public Vec3? Pos { get { int o = __p.__offset(6); return o != 0 ? (Vec3?)(new Vec3()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public Vec3? Dir { get { int o = __p.__offset(8); return o != 0 ? (Vec3?)(new Vec3()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public float Dir { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
+  public int Movedir { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
 
-  public static void StartS2C_MOVE(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void StartS2C_MOVE(FlatBufferBuilder builder) { builder.StartTable(4); }
   public static void AddNickName(FlatBufferBuilder builder, StringOffset nickNameOffset) { builder.AddOffset(0, nickNameOffset.Value, 0); }
   public static void AddPos(FlatBufferBuilder builder, Offset<Vec3> posOffset) { builder.AddStruct(1, posOffset.Value, 0); }
-  public static void AddDir(FlatBufferBuilder builder, Offset<Vec3> dirOffset) { builder.AddStruct(2, dirOffset.Value, 0); }
+  public static void AddDir(FlatBufferBuilder builder, float dir) { builder.AddFloat(2, dir, 0.0f); }
+  public static void AddMovedir(FlatBufferBuilder builder, int movedir) { builder.AddInt(3, movedir, 0); }
   public static Offset<S2C_MOVE> EndS2C_MOVE(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<S2C_MOVE>(o);
