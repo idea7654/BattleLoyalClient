@@ -34,7 +34,7 @@ public class TPSCharacterController : MonoBehaviour
     private float turnSmoothVelocity;
     public float jumpVelocity = 20f;
     private float currentVelocityY;
-    public float rotationSpeed = 720f;
+    public float rotationSpeed = 180f;
     [Range(0.01f, 1f)] public float airControlPercent;
 
     CharacterPosition charaPos;
@@ -136,6 +136,7 @@ public class TPSCharacterController : MonoBehaviour
 
     public void Rotate()
     {
+        if(followCam == null) followCam = Camera.main;
         var targetRotation = followCam.transform.eulerAngles.y; //다음은 여기고치기!!
 
         transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation,

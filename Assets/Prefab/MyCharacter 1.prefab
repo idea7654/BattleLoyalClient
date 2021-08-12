@@ -30,7 +30,7 @@ GameObject:
   - component: {fileID: 5789499775483554979}
   m_Layer: 0
   m_Name: MyCharacter 1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,6 +63,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  speedSmoothTime: 0.1
+  turnSmoothTime: 0.1
+  jumpVelocity: 20
+  rotationSpeed: 180
+  airControlPercent: 0
+  before_move: 0
+  after_move: 0
 --- !u!143 &4076683975528319969
 CharacterController:
   m_ObjectHideFlags: 0

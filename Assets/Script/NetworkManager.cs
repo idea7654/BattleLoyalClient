@@ -137,6 +137,7 @@ public class NetworkManager : MonoBehaviour
                     GameObject player = GameObject.Find(nickname);
                     player.transform.position = new Vector3(userPos.Value.X, userPos.Value.Y, userPos.Value.Z);
                     player.transform.rotation = Quaternion.Euler(new Vector3(0, userDir, 0));
+                    //여기 고쳐야됨!!
                 }
                 break;
             //SendToReliable();
@@ -173,7 +174,10 @@ public class NetworkManager : MonoBehaviour
                     {
                         if(packetGS.Userdata(i).Value.Nickname == MyNick)
                         {
-                            GameObject.Find(MyNick).transform.position = new Vector3(packetGS.Userdata(i).Value.Pos.Value.X, packetGS.Userdata(i).Value.Pos.Value.Y, packetGS.Userdata(i).Value.Pos.Value.Z);
+                            GameObject MyChara = GameObject.Find(MyNick);
+                            MyChara.GetComponent<CharacterController>().enabled = false;
+                            MyChara.transform.position = new Vector3(packetGS.Userdata(i).Value.Pos.Value.X, packetGS.Userdata(i).Value.Pos.Value.Y, packetGS.Userdata(i).Value.Pos.Value.Z);
+                            MyChara.GetComponent<CharacterController>().enabled = true;
                         }
                         else
                         {
