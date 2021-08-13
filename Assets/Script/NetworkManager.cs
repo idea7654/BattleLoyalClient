@@ -135,8 +135,14 @@ public class NetworkManager : MonoBehaviour
                     float userDir = packet.Dir;
                     int moveDir = packet.Movedir;
                     GameObject player = GameObject.Find(nickname);
+                    player.GetComponent<CharacterController>().enabled = false;
                     player.transform.position = new Vector3(userPos.Value.X, userPos.Value.Y, userPos.Value.Z);
                     player.transform.rotation = Quaternion.Euler(new Vector3(0, userDir, 0));
+                    player.GetComponent<CharacterController>().enabled = true;
+                    if(MyNick != nickname)
+                    {
+                        player.GetComponent<OtherUserController>().moveDir = moveDir;
+                    }
                     //여기 고쳐야됨!!
                 }
                 break;

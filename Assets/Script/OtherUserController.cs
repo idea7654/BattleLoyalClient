@@ -62,7 +62,7 @@ public class OtherUserController : MonoBehaviour
         Vector3 move = new Vector3(0, 0, moveInput.y * Time.deltaTime);
         move = this.transform.TransformDirection(move);
         characterController.Move(speed * move);
-        //characterController.Move(new Vector3(0, -1, 0));
+        characterController.Move(new Vector3(0, -1, 0));
         transform.Rotate(new Vector3(0, moveInput.x * rotationSpeed * Time.deltaTime, 0));
     }
 }

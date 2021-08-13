@@ -44,6 +44,7 @@ public class TPSCharacterController : MonoBehaviour
     private Camera followCam;
     public PlayerMove before_move = PlayerMove.stop;
     public PlayerMove after_move = PlayerMove.stop;
+    private NetworkManager networkManager;
 
     public float currentSpeed =>
         new Vector2(characterController.velocity.x, characterController.velocity.z).magnitude;
@@ -54,6 +55,7 @@ public class TPSCharacterController : MonoBehaviour
         animator = characterBody.GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         characterController = GetComponent<CharacterController>();
+        networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
 
         followCam = Camera.main;
         StartCoroutine(CheckMove());
@@ -81,7 +83,7 @@ public class TPSCharacterController : MonoBehaviour
         Vector3 move = new Vector3(0, 0, Input.GetAxisRaw("Vertical") * Time.deltaTime);
         move = this.transform.TransformDirection(move);
         characterController.Move(speed * move);
-        //characterController.Move(new Vector3(0, -1, 0));
+        characterController.Move(new Vector3(0, -1, 0));
         transform.Rotate(new Vector3(0, Input.GetAxisRaw("Horizontal") * rotationSpeed * Time.deltaTime, 0));
 
         if(moveInput.x == 1 && moveInput.y == 0)
@@ -160,6 +162,8 @@ public class TPSCharacterController : MonoBehaviour
                 charaPos.z = transform.position.z;
                 charaPos.angle_y = transform.eulerAngles.y;
                 //sendPacket
+                var data = networkManager.WritePacketManager.WRITE_PU_C2S_MOVE(networkManager.MyNick, transform.position, charaPos.angle_y, (int)before_move);
+                networkManager.SendPacket(data);
             }
 
             //if (before_action != after_action)
