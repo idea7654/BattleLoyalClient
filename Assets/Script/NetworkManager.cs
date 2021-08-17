@@ -38,6 +38,14 @@ public class NetworkManager : MonoBehaviour
     public GameObject OtherCharacter;
     public string MyNick;
 
+    public GameObject NormalGun;
+    public List<GameObject> GunList = new List<GameObject>();
+
+    void Awake()
+    {
+        GunList.Add(NormalGun);
+    }
+
     void Start()
     {
         serverOn();
@@ -70,7 +78,6 @@ public class NetworkManager : MonoBehaviour
             try
             {
                 int size = sock.EndReceiveFrom(result, ref remoteEP);
-                Debug.Log(size);
                 if (size > 0)
                 {
                     recvByte = (byte[])result.AsyncState;
@@ -174,6 +181,7 @@ public class NetworkManager : MonoBehaviour
                     SceneManager.LoadScene("SampleScene");
                     var packetGS = message.Packet<S2C_GAME_START>().Value;
                     int userLength = packetGS.UserdataLength;
+                    int gunLength = packetGS.GundataLength;
                     GameObject.Find(MyNick).GetComponent<TPSCharacterController>().enabled = true;
                     
                     for (int i = 0; i < userLength; i++)
@@ -190,6 +198,21 @@ public class NetworkManager : MonoBehaviour
                             GameObject otherPlayer = Instantiate(OtherCharacter, new Vector3(packetGS.Userdata(i).Value.Pos.Value.X, packetGS.Userdata(i).Value.Pos.Value.Y, packetGS.Userdata(i).Value.Pos.Value.Z), Quaternion.Euler(new Vector3(0, 0, 0)));
                             otherPlayer.name = packetGS.Userdata(i).Value.Nickname;
                             DontDestroyOnLoad(otherPlayer);
+                        }
+                    }
+
+                    for(int i = 0; i < gunLength; i++)
+                    {
+                        Debug.Log(packetGS.Gundata(i).Value.Type);
+                        Debug.Log(packetGS.Gundata(i).Value.Pos.Value.X);
+                        switch(packetGS.Gundata(i).Value.Type)
+                        {
+                            case 0:
+                                GameObject gun = Instantiate(GunList[0], new Vector3(packetGS.Gundata(i).Value.Pos.Value.X, packetGS.Gundata(i).Value.Pos.Value.Y, packetGS.Gundata(i).Value.Pos.Value.Z), Quaternion.Euler(new Vector3(0, 0, 0)));
+                                DontDestroyOnLoad(gun);
+                                break;
+                            default:
+                                break;
                         }
                     }
                     break;
