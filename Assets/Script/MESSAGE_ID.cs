@@ -19,5 +19,6 @@ public enum MESSAGE_ID : byte
   C2S_CANCEL_MATCHING = 12,
   S2C_GAME_START = 13,
   C2S_PICKUP_GUN = 14,
+  S2C_PICKUP_GUN = 15,
 };
 

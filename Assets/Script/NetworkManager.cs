@@ -209,12 +209,20 @@ public class NetworkManager : MonoBehaviour
                         {
                             case 0:
                                 GameObject gun = Instantiate(GunList[0], new Vector3(packetGS.Gundata(i).Value.Pos.Value.X, packetGS.Gundata(i).Value.Pos.Value.Y, packetGS.Gundata(i).Value.Pos.Value.Z), Quaternion.Euler(new Vector3(0, 0, 0)));
+                                gun.transform.GetChild(0).GetComponent<Gun>().gunNum = i;
+                                //이 다음에 해당 플레이어한테 총 붙이고, 처리..
                                 DontDestroyOnLoad(gun);
                                 break;
                             default:
                                 break;
                         }
                     }
+                    break;
+                }
+            case MESSAGE_ID.S2C_PICKUP_GUN:
+                {
+                    var packetGS = message.Packet<S2C_PICKUP_GUN>().Value;
+                    Debug.Log(packetGS.Nickname);
                     break;
                 }
             default:
@@ -340,6 +348,24 @@ public class WritePacket
         builder.Finish(packet.Value);
 
         var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_CANCEL_MATCHING, packet.Value);
+        builder.Finish(message.Value);
+
+        byte[] returnBuf = builder.SizedByteArray();
+        builder.Clear();
+        return returnBuf;
+    }
+
+    public byte[] WRITE_PU_C2S_PICKUP_GUN(String nickname, int gunNum)
+    {
+        var nickName = builder.CreateString(nickname);
+
+        C2S_PICKUP_GUN.StartC2S_PICKUP_GUN(builder);
+        C2S_PICKUP_GUN.AddNickname(builder, nickName);
+        C2S_PICKUP_GUN.AddGunnum(builder, gunNum);
+        var packet = C2S_PICKUP_GUN.EndC2S_PICKUP_GUN(builder);
+        builder.Finish(packet.Value);
+
+        var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_PICKUP_GUN, packet.Value);
         builder.Finish(message.Value);
 
         byte[] returnBuf = builder.SizedByteArray();

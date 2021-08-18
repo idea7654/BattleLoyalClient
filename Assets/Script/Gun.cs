@@ -7,6 +7,7 @@ public class Gun : MonoBehaviour
     public float damage = 10f; //총마다 다르게..
     public float range = 100f; //총마다 다르게..
     private float fireRate = 1f;
+    public int gunNum;
     //public Camera tpsCam;
     //public Transform firePoint;
 

@@ -32,6 +32,7 @@ public struct Message : IFlatbufferObject
   public C2S_CANCEL_MATCHING PacketAsC2S_CANCEL_MATCHING() { return Packet<C2S_CANCEL_MATCHING>().Value; }
   public S2C_GAME_START PacketAsS2C_GAME_START() { return Packet<S2C_GAME_START>().Value; }
   public C2S_PICKUP_GUN PacketAsC2S_PICKUP_GUN() { return Packet<C2S_PICKUP_GUN>().Value; }
+  public S2C_PICKUP_GUN PacketAsS2C_PICKUP_GUN() { return Packet<S2C_PICKUP_GUN>().Value; }
 
   public static Offset<Message> CreateMessage(FlatBufferBuilder builder,
       MESSAGE_ID packet_type = MESSAGE_ID.NONE,

@@ -5,6 +5,12 @@ using UnityEngine;
 public class GetGun : MonoBehaviour
 {
     Animator animator;
+    NetworkManager networkManager;
+
+    void Start()
+    {
+        networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -30,6 +36,9 @@ public class GetGun : MonoBehaviour
                 Ps.target = hitInfo.transform.GetChild(1).transform;
                 animator = transform.GetChild(0).GetComponent<Animator>();
                 animator.SetBool("hasGun", true);
+                int gunNum = hitInfo.transform.GetChild(0).transform.gameObject.GetComponent<Gun>().gunNum;
+                var packet = networkManager.WritePacketManager.WRITE_PU_C2S_PICKUP_GUN(networkManager.MyNick, gunNum);
+                networkManager.SendPacket(packet);
             }
         }
     }
