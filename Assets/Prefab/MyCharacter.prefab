@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7551170049375015424}
   - component: {fileID: 5356706013961481288}
   - component: {fileID: 1579146424799438247}
+  - component: {fileID: -706471972698930931}
   m_Layer: 0
   m_Name: MyCharacter
   m_TagString: Untagged
@@ -61,6 +62,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3937f4e079db7a84aacb21e1d470879c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDir: 0
+  speed: 3
+  rotationSpeed: 180
+--- !u!114 &-706471972698930931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7551170049375015425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8f0c62fb5fa4f14c944269426e09844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &7551170049572575845

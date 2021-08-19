@@ -203,14 +203,11 @@ public class NetworkManager : MonoBehaviour
 
                     for(int i = 0; i < gunLength; i++)
                     {
-                        Debug.Log(packetGS.Gundata(i).Value.Type);
-                        Debug.Log(packetGS.Gundata(i).Value.Pos.Value.X);
                         switch(packetGS.Gundata(i).Value.Type)
                         {
                             case 0:
                                 GameObject gun = Instantiate(GunList[0], new Vector3(packetGS.Gundata(i).Value.Pos.Value.X, packetGS.Gundata(i).Value.Pos.Value.Y, packetGS.Gundata(i).Value.Pos.Value.Z), Quaternion.Euler(new Vector3(0, 0, 0)));
                                 gun.transform.GetChild(0).GetComponent<Gun>().gunNum = i;
-                                //이 다음에 해당 플레이어한테 총 붙이고, 처리..
                                 DontDestroyOnLoad(gun);
                                 break;
                             default:
@@ -222,7 +219,10 @@ public class NetworkManager : MonoBehaviour
             case MESSAGE_ID.S2C_PICKUP_GUN:
                 {
                     var packetGS = message.Packet<S2C_PICKUP_GUN>().Value;
-                    Debug.Log(packetGS.Nickname);
+                    //GameObject targetPlayer = GameObject.Find(packetGS.Nickname);
+                   // targetPlayer.GetComponent<GetGun>().PickGun(packetGS.Gunnum);
+                    //gun.GetComponent<LateUpdatedFollow>().TargetToFollow = GameObject.
+                    //이 다음에 해당 플레이어한테 총 붙이고, 처리..
                     break;
                 }
             default:
