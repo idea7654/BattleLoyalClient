@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class LateUpdatedFollow : MonoBehaviour
 {
-    public Transform targetToFollow;
+    public Transform target;
 
     private void LateUpdate()
     {
-        if(targetToFollow)
+        if (target)
         {
-            transform.position = targetToFollow.position;
-            transform.rotation = targetToFollow.rotation;
+            transform.position = target.position;
+            transform.rotation = target.rotation;
         }
+    }
+
+    public void SetTarget(Transform paramTrans)
+    {
+        target = paramTrans;
     }
 }

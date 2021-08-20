@@ -40,6 +40,7 @@ public class NetworkManager : MonoBehaviour
 
     public GameObject NormalGun;
     public List<GameObject> GunList = new List<GameObject>();
+    public List<GameObject> SessionGuns = new List<GameObject>();
 
     void Awake()
     {
@@ -206,9 +207,11 @@ public class NetworkManager : MonoBehaviour
                         switch(packetGS.Gundata(i).Value.Type)
                         {
                             case 0:
-                                GameObject gun = Instantiate(GunList[0], new Vector3(packetGS.Gundata(i).Value.Pos.Value.X, packetGS.Gundata(i).Value.Pos.Value.Y, packetGS.Gundata(i).Value.Pos.Value.Z), Quaternion.Euler(new Vector3(0, 0, 0)));
+                                GameObject gun = Instantiate(GunList[i], new Vector3(packetGS.Gundata(i).Value.Pos.Value.X, packetGS.Gundata(i).Value.Pos.Value.Y, packetGS.Gundata(i).Value.Pos.Value.Z), Quaternion.Euler(new Vector3(0, 0, 0)));
                                 gun.transform.GetChild(0).GetComponent<Gun>().gunNum = i;
+                                gun.name = i.ToString();
                                 DontDestroyOnLoad(gun);
+                                SessionGuns.Add(gun);
                                 break;
                             default:
                                 break;
@@ -219,9 +222,9 @@ public class NetworkManager : MonoBehaviour
             case MESSAGE_ID.S2C_PICKUP_GUN:
                 {
                     var packetGS = message.Packet<S2C_PICKUP_GUN>().Value;
-                    //GameObject targetPlayer = GameObject.Find(packetGS.Nickname);
-                   // targetPlayer.GetComponent<GetGun>().PickGun(packetGS.Gunnum);
-                    //gun.GetComponent<LateUpdatedFollow>().TargetToFollow = GameObject.
+                    GameObject targetPlayer = GameObject.Find(packetGS.Nickname);
+                    targetPlayer.GetComponent<GetGun>().PickGun(packetGS.Gunnum);
+                    //gun.GetComponent<LateUpdatedFollow>().TargetToFollow = targetPlayer.transform;
                     //이 다음에 해당 플레이어한테 총 붙이고, 처리..
                     break;
                 }

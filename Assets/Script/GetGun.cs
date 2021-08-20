@@ -6,9 +6,8 @@ public class GetGun : MonoBehaviour
 {
     Animator animator;
     NetworkManager networkManager;
-
     //public GameObject[] Guns;
-    
+
     void Start()
     {
         networkManager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
@@ -28,33 +27,36 @@ public class GetGun : MonoBehaviour
 
         if (Physics.Raycast(ray, out hitInfo, 100))
         {
-            if(hitInfo.transform.tag == "Gun")
+            if (hitInfo.transform.tag == "Gun")
             {
-                Debug.Log("발견!!");
+                //Debug.Log("발견!!");
                 //여기서 총 주울 수 있도록...
                 //hitInfo.transform.gameObject.GetComponent<Rigidbody>().enabled = false;
-                //Destroy(hitInfo.transform.gameObject.GetComponent<Rigidbody>());
-                //hitInfo.transform.gameObject.GetComponent<CapsuleCollider>().enabled = false;
-                //int gunNum = hitInfo.transform.GetChild(0).transform.gameObject.GetComponent<Gun>().gunNum;
-                //var packet = networkManager.WritePacketManager.WRITE_PU_C2S_PICKUP_GUN(networkManager.MyNick, gunNum);
-                //networkManager.SendPacket(packet);
+                Destroy(hitInfo.transform.gameObject.GetComponent<Rigidbody>());
+                hitInfo.transform.gameObject.GetComponent<CapsuleCollider>().enabled = false;
+                
+                int gunNum = hitInfo.transform.GetChild(0).transform.gameObject.GetComponent<Gun>().gunNum;
+                var packet = networkManager.WritePacketManager.WRITE_PU_C2S_PICKUP_GUN(networkManager.MyNick, gunNum);
+                networkManager.SendPacket(packet);
             }
         }
     }
 
     public void PickGun(int gunNum)
     {
-        Debug.Log(networkManager.GunList.Count);
-        //networkManager.GunList.ForEach(delegate (GameObject gun)
-        //{
-        //    if (gunNum == gun.transform.GetChild(0).transform.gameObject.GetComponent<Gun>().gunNum)
-        //    {
-        //        gun.transform.gameObject.GetComponent<LateUpdatedFollow>().targetToFollow = GameObject.Find("RightHandAttatch").transform; //이거 다른플레이어들도 되도록
-        //        PlayerShooter Ps = GameObject.Find(networkManager.MyNick).GetComponent<PlayerShooter>();
-        //        Ps.target = gun.transform.GetChild(1).transform;
-        //        Debug.Log(Ps.target);
-        //        animator.SetBool("hasGun", true);
-        //    }
-        //});
+        networkManager.SessionGuns.ForEach(delegate (GameObject gun)
+        {
+            if (gunNum == gun.transform.GetChild(0).transform.gameObject.GetComponent<Gun>().gunNum)
+            {
+                //GameObject targetUserHand = RecursiveFindChild(transform, "RightHandAttatch");
+                GameObject targetUserHand = GameObject.Find("RightHandAttatch");
+                LateUpdatedFollow lateUpdatedFollow = gun.transform.gameObject.GetComponent<LateUpdatedFollow>();
+                lateUpdatedFollow.SetTarget(targetUserHand.transform); //이거 다른플레이어들도 되도록
+                //lateUpdatedFollow.target = targetUserHand;
+                PlayerShooter Ps = transform.GetChild(0).GetComponent<PlayerShooter>();
+                Ps.target = gun.transform.GetChild(1).transform;
+                animator.SetBool("hasGun", true);
+            }
+        });
     }
 }
