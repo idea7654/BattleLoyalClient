@@ -48,15 +48,40 @@ public class GetGun : MonoBehaviour
         {
             if (gunNum == gun.transform.GetChild(0).transform.gameObject.GetComponent<Gun>().gunNum)
             {
+                Destroy(gun.transform.gameObject.GetComponent<Rigidbody>());
+                gun.transform.gameObject.GetComponent<CapsuleCollider>().enabled = false;
                 //GameObject targetUserHand = RecursiveFindChild(transform, "RightHandAttatch");
-                GameObject targetUserHand = GameObject.Find("RightHandAttatch");
+                Transform targetUserHand = RecursiveFindChild(transform, "RightHandAttatch");
                 LateUpdatedFollow lateUpdatedFollow = gun.transform.gameObject.GetComponent<LateUpdatedFollow>();
-                lateUpdatedFollow.SetTarget(targetUserHand.transform); //이거 다른플레이어들도 되도록
+                lateUpdatedFollow.SetTarget(targetUserHand); //이거 다른플레이어들도 되도록
                 //lateUpdatedFollow.target = targetUserHand;
                 PlayerShooter Ps = transform.GetChild(0).GetComponent<PlayerShooter>();
                 Ps.target = gun.transform.GetChild(1).transform;
                 animator.SetBool("hasGun", true);
             }
         });
+    }
+
+    public static Transform RecursiveFindChild(Transform parent, string childName)
+    {
+        Transform child = null;
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            child = parent.GetChild(i);
+            if (child.name == childName)
+            {
+                break;
+            }
+            else
+            {
+                child = RecursiveFindChild(child, childName);
+                if (child != null)
+                {
+                    break;
+                }
+            }
+        }
+
+        return child;
     }
 }
