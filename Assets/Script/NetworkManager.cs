@@ -142,6 +142,7 @@ public class NetworkManager : MonoBehaviour
                     var userPos = packet.Pos;
                     float userDir = packet.Dir;
                     int moveDir = packet.Movedir;
+                    Debug.Log(nickname);
                     GameObject player = GameObject.Find(nickname);
                     player.GetComponent<CharacterController>().enabled = false;
                     player.transform.position = new Vector3(userPos.Value.X, userPos.Value.Y, userPos.Value.Z);
