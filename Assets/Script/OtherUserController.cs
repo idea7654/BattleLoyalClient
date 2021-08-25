@@ -8,10 +8,12 @@ public class OtherUserController : MonoBehaviour
     public float speed = 3.0f;
     public float rotationSpeed = 180f;
     private CharacterController characterController;
+    Animator animator;
     // Start is called before the first frame update
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        animator = transform.GetChild(0).transform.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -59,6 +61,8 @@ public class OtherUserController : MonoBehaviour
         {
             moveInput = new Vector2(1, -1);
         }
+        bool isMove = moveInput.magnitude != 0;
+        animator.SetBool("isRun", isMove);
         Vector3 move = new Vector3(0, 0, moveInput.y * Time.deltaTime);
         move = this.transform.TransformDirection(move);
         characterController.Move(speed * move);

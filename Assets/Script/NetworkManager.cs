@@ -142,7 +142,6 @@ public class NetworkManager : MonoBehaviour
                     var userPos = packet.Pos;
                     float userDir = packet.Dir;
                     int moveDir = packet.Movedir;
-                    Debug.Log(nickname);
                     GameObject player = GameObject.Find(nickname);
                     player.GetComponent<CharacterController>().enabled = false;
                     player.transform.position = new Vector3(userPos.Value.X, userPos.Value.Y, userPos.Value.Z);
@@ -169,6 +168,7 @@ public class NetworkManager : MonoBehaviour
                     MyNick = packetValue.Nickname;
                     obj.GetComponent<TPSCharacterController>().enabled = false;
                     DontDestroyOnLoad(obj);
+                    StartCoroutine(ResetSessionTime(MyNick));
                     //여기서 씬전환 + 유저정보 바탕 프리팹(우선은 로비서버 -> 컨텐츠 서버로 넘어갈 예정이기에 이건 로비에서 사용될 것
                     break;
                 }
@@ -229,6 +229,19 @@ public class NetworkManager : MonoBehaviour
                     //이 다음에 해당 플레이어한테 총 붙이고, 처리..
                     break;
                 }
+            case MESSAGE_ID.S2C_USER_NOT_FOUND:
+                {
+                    var packetGS = message.Packet<S2C_USER_NOT_FOUND>().Value;
+                    string packetMessage = packetGS.Message;
+                    Debug.Log(packetMessage);
+                    break;
+                }
+            case MESSAGE_ID.S2C_USER_DISCONNECT:
+                {
+                    var packetGS = message.Packet<S2C_USER_DISCONNECT>().Value;
+                    Debug.Log(packetGS.Nickname + " disconnect");
+                    break;
+                }
             default:
                 break;
         }
@@ -256,7 +269,16 @@ public class NetworkManager : MonoBehaviour
         Array.Copy(SendData, 0, newArray, PLByte.Length + PNByte.Length, SendData.Length);
 
         int result = sock.SendTo(newArray, newArray.Length, SocketFlags.None, CsServerEP);
-        Debug.Log(result);
+    }
+
+    IEnumerator ResetSessionTime(String nickname)
+    {
+        while(true)
+        {
+            var makePacket = WritePacketManager.WRITE_PU_C2S_EXTEND_SESSION(nickname);
+            SendPacket(makePacket);
+            yield return new WaitForSeconds(1.0f);
+        }
     }
 }
 
@@ -370,6 +392,23 @@ public class WritePacket
         builder.Finish(packet.Value);
 
         var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_PICKUP_GUN, packet.Value);
+        builder.Finish(message.Value);
+
+        byte[] returnBuf = builder.SizedByteArray();
+        builder.Clear();
+        return returnBuf;
+    }
+
+    public byte[] WRITE_PU_C2S_EXTEND_SESSION(String nickname)
+    {
+        var nickName = builder.CreateString(nickname);
+
+        C2S_EXTEND_SESSION.StartC2S_EXTEND_SESSION(builder);
+        C2S_EXTEND_SESSION.AddNickName(builder, nickName);
+        var packet = C2S_EXTEND_SESSION.EndC2S_EXTEND_SESSION(builder);
+        builder.Finish(packet.Value);
+
+        var message = Message.CreateMessage(builder, MESSAGE_ID.C2S_EXTEND_SESSION, packet.Value);
         builder.Finish(message.Value);
 
         byte[] returnBuf = builder.SizedByteArray();

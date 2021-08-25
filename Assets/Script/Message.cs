@@ -33,6 +33,8 @@ public struct Message : IFlatbufferObject
   public S2C_GAME_START PacketAsS2C_GAME_START() { return Packet<S2C_GAME_START>().Value; }
   public C2S_PICKUP_GUN PacketAsC2S_PICKUP_GUN() { return Packet<C2S_PICKUP_GUN>().Value; }
   public S2C_PICKUP_GUN PacketAsS2C_PICKUP_GUN() { return Packet<S2C_PICKUP_GUN>().Value; }
+  public S2C_USER_NOT_FOUND PacketAsS2C_USER_NOT_FOUND() { return Packet<S2C_USER_NOT_FOUND>().Value; }
+  public S2C_USER_DISCONNECT PacketAsS2C_USER_DISCONNECT() { return Packet<S2C_USER_DISCONNECT>().Value; }
 
   public static Offset<Message> CreateMessage(FlatBufferBuilder builder,
       MESSAGE_ID packet_type = MESSAGE_ID.NONE,
