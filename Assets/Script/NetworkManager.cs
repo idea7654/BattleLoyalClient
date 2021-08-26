@@ -239,7 +239,8 @@ public class NetworkManager : MonoBehaviour
             case MESSAGE_ID.S2C_USER_DISCONNECT:
                 {
                     var packetGS = message.Packet<S2C_USER_DISCONNECT>().Value;
-                    Debug.Log(packetGS.Nickname + " disconnect");
+                    //Debug.Log(packetGS.Nickname + " disconnect");
+                    Destroy(GameObject.Find(packetGS.Nickname));
                     break;
                 }
             default:

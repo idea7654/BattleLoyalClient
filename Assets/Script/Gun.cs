@@ -34,6 +34,7 @@ public class Gun : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 Shoot();
+                //이 부분을 패킷으로 보내야됨..근데 그 전에 총알 날라가는걸 구현해야댐..
                 timer = 0f;
                 animator.SetBool("isShoot", true);
             }
