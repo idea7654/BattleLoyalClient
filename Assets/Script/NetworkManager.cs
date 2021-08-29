@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using FlatBuffers;
 using UnityEngine.SceneManagement;
+
 [Serializable]
 public class NetworkManager : MonoBehaviour
 {
@@ -41,6 +42,8 @@ public class NetworkManager : MonoBehaviour
     public GameObject NormalGun;
     public List<GameObject> GunList = new List<GameObject>();
     public List<GameObject> SessionGuns = new List<GameObject>();
+
+    public int userLength = 0;
 
     void Awake()
     {
@@ -182,7 +185,7 @@ public class NetworkManager : MonoBehaviour
                 {
                     SceneManager.LoadScene("SampleScene");
                     var packetGS = message.Packet<S2C_GAME_START>().Value;
-                    int userLength = packetGS.UserdataLength;
+                    userLength = packetGS.UserdataLength;
                     int gunLength = packetGS.GundataLength;
                     GameObject.Find(MyNick).GetComponent<TPSCharacterController>().enabled = true;
                     
@@ -240,6 +243,7 @@ public class NetworkManager : MonoBehaviour
                 {
                     var packetGS = message.Packet<S2C_USER_DISCONNECT>().Value;
                     //Debug.Log(packetGS.Nickname + " disconnect");
+                    GameObject.Find("People").GetComponent<SetGameInfo>().SetText("남은 인원: " + (userLength - 1).ToString() + "명");
                     Destroy(GameObject.Find(packetGS.Nickname));
                     break;
                 }
