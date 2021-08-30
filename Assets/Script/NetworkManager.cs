@@ -172,6 +172,9 @@ public class NetworkManager : MonoBehaviour
                     obj.GetComponent<TPSCharacterController>().enabled = false;
                     DontDestroyOnLoad(obj);
                     StartCoroutine(ResetSessionTime(MyNick));
+                    int Ack = 8888;
+                    byte[] AckByte = BitConverter.GetBytes(Ack);
+                    sock.SendTo(AckByte, AckByte.Length, SocketFlags.None, CsServerEP);
                     //여기서 씬전환 + 유저정보 바탕 프리팹(우선은 로비서버 -> 컨텐츠 서버로 넘어갈 예정이기에 이건 로비에서 사용될 것
                     break;
                 }
